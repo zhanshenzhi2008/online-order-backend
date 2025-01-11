@@ -1,0 +1,72 @@
+= 在线点餐系统 API 文档
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[overview]]
+== 概述
+
+在线点餐系统提供了一系列 RESTful API，用于管理食品、订单、用户等资源。
+
+[[resources]]
+== 资源
+
+[[food-resources]]
+=== 食品管理
+
+[[food-list]]
+==== 获取食品列表
+
+使用此接口获取食品列表，可以根据分类ID筛选。
+
+===== 请求示例
+include::{snippets}/food-list/http-request.adoc[]
+
+===== 请求参数
+include::{snippets}/food-list/request-parameters.adoc[]
+
+===== 响应示例
+include::{snippets}/food-list/http-response.adoc[]
+
+===== 响应字段说明
+include::{snippets}/food-list/response-fields.adoc[]
+
+[[order-resources]]
+=== 订单管理
+
+[[order-create]]
+==== 创建订单
+
+使用此接口创建新订单。
+
+===== 请求示例
+include::{snippets}/order-create/http-request.adoc[]
+
+===== 请求字段说明
+include::{snippets}/order-create/request-fields.adoc[]
+
+===== 响应示例
+include::{snippets}/order-create/http-response.adoc[]
+
+===== 响应字段说明
+include::{snippets}/order-create/response-fields.adoc[]
+
+[[order-list]]
+==== 获取订单列表
+
+使用此接口获取订单列表，可以根据用户ID和订单状态筛选。
+
+===== 请求示例
+include::{snippets}/order-list/http-request.adoc[]
+
+===== 请求参数
+include::{snippets}/order-list/request-parameters.adoc[]
+
+===== 响应示例
+include::{snippets}/order-list/http-response.adoc[]
+
+===== 响应字段说明
+include::{snippets}/order-list/response-fields.adoc[] 
