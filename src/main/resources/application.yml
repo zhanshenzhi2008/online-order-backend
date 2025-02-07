@@ -7,12 +7,16 @@ spring:
   profiles:
     active: dev
   application:
-    name: online-order
+    name: online-order-backend
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/online_order?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
     druid:
       initial-size: 5
-      min-idle: 5
+      min-idle: 10
       max-active: 20
       max-wait: 60000
       time-between-eviction-runs-millis: 60000
@@ -26,8 +30,11 @@ spring:
       filters: stat,wall
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
   redis:
-    timeout: 10000
+    host: localhost
+    port: 6379
+    password: 
     database: 0
+    timeout: 10000
     lettuce:
       pool:
         max-active: 8
@@ -37,7 +44,7 @@ spring:
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
-  type-aliases-package: com.zb.order.model
+  type-aliases-package: com.orjrs.admin.entity
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
@@ -49,9 +56,51 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 
-caffeine:
-  cache:
-    default:
-      initial-capacity: 100
-      maximum-size: 1000
-      expire-after-write: 5m 
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  packages-to-scan: com.orjrs
+  paths-to-match: /api/**
+
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
+    swagger-model-name: 实体类列表
+    enable-footer: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+      path-mapping:
+        health: health
+        info: info
+        metrics: metrics
+        prometheus: prometheus
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    export:
+      prometheus:
+        enabled: true
+
+cache:
+  redis:
+    time-to-live: 3600000
+    cache-null-values: true
+    use-key-prefix: true
+    key-prefix: "online-order:" 

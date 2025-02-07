@@ -1,4 +1,4 @@
-package com.zb.order;
+package com.orjrs;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableCaching
-@MapperScan("com.zb.order.mapper")
+@MapperScan("com.orjrs.**.mapper")
 public class OnlineOrderApplication {
     public static void main(String[] args) {
         SpringApplication.run(OnlineOrderApplication.class, args);

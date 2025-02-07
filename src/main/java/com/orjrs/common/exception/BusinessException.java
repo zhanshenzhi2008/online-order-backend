@@ -11,6 +11,7 @@ public class BusinessException extends RuntimeException {
      * 错误消息
      */
     private final String message;
+    private final int code;
 
     /**
      * 构造函数
@@ -18,7 +19,12 @@ public class BusinessException extends RuntimeException {
      * @param message 错误消息
      */
     public BusinessException(String message) {
+        this(message, 500);
+    }
+
+    public BusinessException(String message, int code) {
         super(message);
         this.message = message;
+        this.code = code;
     }
 } 

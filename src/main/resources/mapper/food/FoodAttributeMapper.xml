@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orjrs.admin.mapper.food.FoodAttributeMapper">
+
+    <!-- 批量插入属性 -->
+    <insert id="insertBatch">
+        INSERT INTO food_attribute (
+            food_id, name, value, sort, deleted, create_time, update_time
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.foodId}, #{item.name}, #{item.value}, #{item.sort},
+                0, NOW(), NOW()
+            )
+        </foreach>
+    </insert>
+
+</mapper> 
