@@ -1,7 +1,8 @@
-package com.orjrs.mapper;
+package com.orjrs.miniapp.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.orjrs.entity.Shop;
+import com.orjrs.miniapp.entity.Shop;
+
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

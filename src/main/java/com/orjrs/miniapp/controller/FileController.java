@@ -1,4 +1,4 @@
-package com.orjrs.controller;
+package com.orjrs.miniapp.controller;
 
 import com.orjrs.common.R;
 import com.orjrs.utils.FileUtils;

@@ -1,8 +1,10 @@
-package com.orjrs.controller;
+package com.orjrs.admin.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orjrs.entity.User;
-import com.orjrs.service.UserService;
+import com.orjrs.miniapp.controller.UserController;
+import com.orjrs.miniapp.entity.User;
+import com.orjrs.miniapp.service.UserService;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;

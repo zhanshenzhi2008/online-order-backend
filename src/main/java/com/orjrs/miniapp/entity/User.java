@@ -1,4 +1,4 @@
-package com.orjrs.entity;
+package com.orjrs.miniapp.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

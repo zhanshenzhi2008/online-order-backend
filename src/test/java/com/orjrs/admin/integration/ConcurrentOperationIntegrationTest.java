@@ -1143,46 +1143,45 @@ class ConcurrentOperationIntegrationTest extends BaseTest {
     @Rollback(false)
     void testConcurrentGoodsReview() throws InterruptedException {
         // 1. 准备测试数据
-        int threadCount = 20;
-        AtomicInteger successCount = new AtomicInteger(0);
-        AtomicInteger failureCount = new AtomicInteger(0);
-        Map<Integer, AtomicInteger> ratingCounts = new ConcurrentHashMap<>();
-
-        // 2. 创建并发工具
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        int threadCount = 20;  // 并发线程数
+        Long orderId = 1L;     // 测试订单ID
+        Long goodsId = 1L;     // 测试商品ID
+        Long userId = 1L;      // 测试用户ID
+        
+        // 2. 准备并发工具
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
         CountDownLatch startLatch = new CountDownLatch(1);
         CountDownLatch endLatch = new CountDownLatch(threadCount);
-        List<Future<?>> futures = new ArrayList<>();
-
+        AtomicInteger successCount = new AtomicInteger(0);
+        AtomicInteger failCount = new AtomicInteger(0);
+        List<GoodsReview> successReviews = Collections.synchronizedList(new ArrayList<>());
+        
         // 3. 提交并发任务
         for (int i = 0; i < threadCount; i++) {
-            final int index = i;
-            Future<?> future = executorService.submit(() -> {
+            final int rating = (i % 5) + 1;  // 1-5星评价
+            executorService.submit(() -> {
                 try {
                     startLatch.await(); // 等待统一开始
                     
                     try {
                         // 创建评价对象
                         GoodsReview review = new GoodsReview();
-                        review.setGoodsId(1L);
-                        review.setUserId(1L);
-                        review.setOrderId(1L);
-                        review.setRating(index % 5 + 1); // 1-5星评价
-                        review.setContent("并发测试评价-" + index);
-                        review.setIsAnonymous(index % 2 == 0);
+                        review.setGoodsId(goodsId);
+                        review.setUserId(userId);
+                        review.setOrderId(orderId);
+                        review.setRating(rating);
+                        review.setContent("并发测试评价-" + rating + "星");
+                        review.setIsAnonymous(false);
                         
                         // 尝试创建评价
-                        goodsReviewService.createReview(review);
-                        
-                        // 记录成功
-                        successCount.incrementAndGet();
-                        ratingCounts.computeIfAbsent(review.getRating(), k -> new AtomicInteger(0))
-                                  .incrementAndGet();
-                        
+                        Long reviewId = goodsReviewService.createReview(review);
+                        if (reviewId != null) {
+                            successCount.incrementAndGet();
+                            successReviews.add(review);
+                        }
                     } catch (BusinessException e) {
-                        // 记录失败
-                        failureCount.incrementAndGet();
-                        log.info("评价创建失败: {}", e.getMessage());
+                        log.info("创建评价失败: {}", e.getMessage());
+                        failCount.incrementAndGet();
                     }
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -1190,14 +1189,13 @@ class ConcurrentOperationIntegrationTest extends BaseTest {
                     endLatch.countDown();
                 }
             });
-            futures.add(future);
         }
-
+        
         // 4. 开始并发测试
         long startTime = System.currentTimeMillis();
         startLatch.countDown();
         
-        // 5. 等待所有任务完成
+        // 5. 等待所有线程完成
         boolean allFinished = endLatch.await(30, TimeUnit.SECONDS);
         long endTime = System.currentTimeMillis();
         
@@ -1205,20 +1203,30 @@ class ConcurrentOperationIntegrationTest extends BaseTest {
         executorService.shutdown();
         
         // 7. 验证结果
-        assertTrue(allFinished, "并发测试超时");
-        assertEquals(threadCount, successCount.get() + failureCount.get(), "总尝试次数不匹配");
-        assertEquals(1, successCount.get(), "应该只有一个评价成功");
-        assertEquals(threadCount - 1, failureCount.get(), "失败次数不匹配");
+        List<GoodsReview> finalReviews = goodsReviewService.getGoodsReviews(goodsId);
         
-        // 8. 输出统计信息
-        log.info("并发评价测试完成:");
+        // 打印测试结果
+        log.info("并发商品评价测试完成:");
         log.info("总耗时: {}ms", endTime - startTime);
         log.info("总尝试次数: {}", threadCount);
         log.info("成功次数: {}", successCount.get());
-        log.info("失败次数: {}", failureCount.get());
-        ratingCounts.forEach((rating, count) -> 
-            log.info("{}星评价尝试次数: {}", rating, count.get())
-        );
+        log.info("失败次数: {}", failCount.get());
+        log.info("最终评价数: {}", finalReviews.size());
+        
+        // 8. 断言验证
+        assertTrue(allFinished, "并发测试超时");
+        assertEquals(1, successCount.get(), "应该只有一个评价成功");
+        assertEquals(threadCount - 1, failCount.get(), "其他评价应该都失败");
+        assertEquals(1, finalReviews.size(), "最终应该只有一条评价记录");
+        assertEquals(orderId, finalReviews.get(0).getOrderId(), "评价应该关联到正确的订单");
+        
+        // 9. 验证评价内容
+        GoodsReview savedReview = finalReviews.get(0);
+        assertNotNull(savedReview.getId(), "评价ID不应为空");
+        assertTrue(savedReview.getRating() >= 1 && savedReview.getRating() <= 5, "评分应该在1-5之间");
+        assertTrue(savedReview.getContent().startsWith("并发测试评价-"), "评价内容应该符合预期格式");
+        assertFalse(savedReview.getIsAnonymous(), "评价不应该是匿名的");
+        assertNull(savedReview.getReplyContent(), "新评价还没有回复内容");
     }
 
     @Test
@@ -1294,5 +1302,115 @@ class ConcurrentOperationIntegrationTest extends BaseTest {
         log.info("总尝试次数: {}", threadCount);
         log.info("成功次数: {}", successCount.get());
         log.info("失败次数: {}", failureCount.get());
+    }
+
+    @Test
+    @Rollback(false)
+    void testConcurrentMultiOrderReviews() throws InterruptedException {
+        // 1. 准备测试数据 - 多个订单
+        Long[] orderIds = {1L, 2L, 3L, 4L, 5L};  // 使用测试数据中的5个订单
+        Long goodsId = 1L;
+        Long userId = 1L;
+        int threadsPerOrder = 4;  // 每个订单4个并发线程
+        int totalThreads = orderIds.length * threadsPerOrder;
+        
+        // 2. 准备并发工具
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        CountDownLatch startLatch = new CountDownLatch(1);
+        CountDownLatch endLatch = new CountDownLatch(totalThreads);
+        Map<Long, AtomicInteger> successCountPerOrder = new ConcurrentHashMap<>();
+        Map<Long, AtomicInteger> failCountPerOrder = new ConcurrentHashMap<>();
+        List<GoodsReview> successReviews = Collections.synchronizedList(new ArrayList<>());
+        
+        // 3. 提交并发任务
+        for (Long orderId : orderIds) {
+            for (int i = 0; i < threadsPerOrder; i++) {
+                final int rating = (i % 5) + 1;
+                executorService.submit(() -> {
+                    try {
+                        startLatch.await();
+                        
+                        try {
+                            // 创建评价对象
+                            GoodsReview review = new GoodsReview();
+                            review.setGoodsId(goodsId);
+                            review.setUserId(userId);
+                            review.setOrderId(orderId);
+                            review.setRating(rating);
+                            review.setContent("订单" + orderId + "的并发测试评价-" + rating + "星");
+                            review.setIsAnonymous(false);
+                            
+                            // 尝试创建评价
+                            Long reviewId = goodsReviewService.createReview(review);
+                            if (reviewId != null) {
+                                successCountPerOrder.computeIfAbsent(orderId, k -> new AtomicInteger(0))
+                                                  .incrementAndGet();
+                                successReviews.add(review);
+                            }
+                        } catch (BusinessException e) {
+                            failCountPerOrder.computeIfAbsent(orderId, k -> new AtomicInteger(0))
+                                           .incrementAndGet();
+                            log.info("创建评价失败 - 订单{}: {}", orderId, e.getMessage());
+                        }
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    } finally {
+                        endLatch.countDown();
+                    }
+                });
+            }
+        }
+        
+        // 4. 开始并发测试
+        long startTime = System.currentTimeMillis();
+        startLatch.countDown();
+        
+        // 5. 等待所有线程完成
+        boolean allFinished = endLatch.await(30, TimeUnit.SECONDS);
+        long endTime = System.currentTimeMillis();
+        
+        // 6. 关闭线程池
+        executorService.shutdown();
+        
+        // 7. 验证结果
+        List<GoodsReview> finalReviews = goodsReviewService.getGoodsReviews(goodsId);
+        
+        // 打印测试结果
+        log.info("多订单并发评价测试完成:");
+        log.info("总耗时: {}ms", endTime - startTime);
+        log.info("总订单数: {}", orderIds.length);
+        log.info("每个订单的并发线程数: {}", threadsPerOrder);
+        log.info("总尝试次数: {}", totalThreads);
+        
+        // 按订单ID输出统计信息
+        for (Long orderId : orderIds) {
+            int successCount = successCountPerOrder.getOrDefault(orderId, new AtomicInteger(0)).get();
+            int failCount = failCountPerOrder.getOrDefault(orderId, new AtomicInteger(0)).get();
+            log.info("订单{} - 成功次数: {}, 失败次数: {}", orderId, successCount, failCount);
+        }
+        
+        // 8. 断言验证
+        assertTrue(allFinished, "并发测试超时");
+        assertEquals(orderIds.length, finalReviews.size(), "每个订单应该有一个成功的评价");
+        
+        // 验证每个订单的评价情况
+        for (Long orderId : orderIds) {
+            // 验证每个订单只有一个成功的评价
+            assertEquals(1, successCountPerOrder.getOrDefault(orderId, new AtomicInteger(0)).get(),
+                    "订单" + orderId + "应该只有一个评价成功");
+            assertEquals(threadsPerOrder - 1, failCountPerOrder.getOrDefault(orderId, new AtomicInteger(0)).get(),
+                    "订单" + orderId + "的其他评价应该都失败");
+            
+            // 验证评价内容
+            GoodsReview review = finalReviews.stream()
+                    .filter(r -> r.getOrderId().equals(orderId))
+                    .findFirst()
+                    .orElse(null);
+            assertNotNull(review, "订单" + orderId + "的评价不应为空");
+            assertTrue(review.getContent().startsWith("订单" + orderId), 
+                    "评价内容应该包含正确的订单ID");
+            assertTrue(review.getRating() >= 1 && review.getRating() <= 5,
+                    "评分应该在1-5之间");
+        }
     }
 } 

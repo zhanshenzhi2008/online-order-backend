@@ -1,7 +1,8 @@
-package com.orjrs.mapper;
+package com.orjrs.miniapp.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.orjrs.entity.Order;
+import com.orjrs.miniapp.entity.Order;
+
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;

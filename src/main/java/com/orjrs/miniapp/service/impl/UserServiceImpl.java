@@ -1,11 +1,11 @@
-package com.orjrs.service.impl;
+package com.orjrs.miniapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.orjrs.common.BaseException;
-import com.orjrs.entity.User;
-import com.orjrs.mapper.UserMapper;
-import com.orjrs.service.UserService;
+import com.orjrs.miniapp.entity.User;
+import com.orjrs.miniapp.mapper.UserMapper;
+import com.orjrs.miniapp.service.UserService;
 import com.orjrs.utils.RedisUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

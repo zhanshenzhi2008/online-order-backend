@@ -1,10 +1,11 @@
-package com.orjrs.service.impl;
+package com.orjrs.miniapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.orjrs.entity.Food;
-import com.orjrs.mapper.FoodMapper;
-import com.orjrs.service.FoodService;
+import com.orjrs.miniapp.entity.Food;
+import com.orjrs.miniapp.mapper.FoodMapper;
+import com.orjrs.miniapp.service.FoodService;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

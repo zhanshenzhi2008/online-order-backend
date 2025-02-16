@@ -1,7 +1,8 @@
-package com.orjrs.service;
+package com.orjrs.miniapp.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.orjrs.entity.Address;
+import com.orjrs.miniapp.entity.Address;
+
 import java.util.List;
 
 /**

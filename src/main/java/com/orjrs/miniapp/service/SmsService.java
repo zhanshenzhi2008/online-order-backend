@@ -1,4 +1,4 @@
-package com.orjrs.service;
+package com.orjrs.miniapp.service;
 
 public interface SmsService {
     /**

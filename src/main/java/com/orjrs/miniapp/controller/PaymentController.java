@@ -1,9 +1,10 @@
-package com.orjrs.controller;
+package com.orjrs.miniapp.controller;
 
 import com.orjrs.common.R;
-import com.orjrs.entity.Order;
-import com.orjrs.service.OrderService;
-import com.orjrs.service.PaymentService;
+import com.orjrs.miniapp.entity.Order;
+import com.orjrs.miniapp.service.OrderService;
+import com.orjrs.miniapp.service.PaymentService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

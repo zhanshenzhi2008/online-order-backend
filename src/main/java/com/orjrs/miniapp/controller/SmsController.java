@@ -1,7 +1,8 @@
-package com.orjrs.controller;
+package com.orjrs.miniapp.controller;
 
 import com.orjrs.common.R;
-import com.orjrs.service.SmsService;
+import com.orjrs.miniapp.service.SmsService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

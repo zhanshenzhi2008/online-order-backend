@@ -1,11 +1,12 @@
-package com.orjrs.service.impl;
+package com.orjrs.miniapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.orjrs.entity.Order;
-import com.orjrs.mapper.FoodMapper;
-import com.orjrs.mapper.OrderMapper;
-import com.orjrs.service.OrderService;
+import com.orjrs.miniapp.entity.Order;
+import com.orjrs.miniapp.mapper.FoodMapper;
+import com.orjrs.miniapp.mapper.OrderMapper;
+import com.orjrs.miniapp.service.OrderService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

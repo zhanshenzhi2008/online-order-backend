@@ -1,7 +1,7 @@
-package com.orjrs.service;
+package com.orjrs.miniapp.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.orjrs.entity.User;
+import com.orjrs.miniapp.entity.User;
 
 /**
  * 用户服务接口

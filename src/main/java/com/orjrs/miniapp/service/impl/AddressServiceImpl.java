@@ -1,11 +1,11 @@
-package com.orjrs.service.impl;
+package com.orjrs.miniapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.orjrs.common.exception.BusinessException;
-import com.orjrs.entity.Address;
-import com.orjrs.mapper.AddressMapper;
-import com.orjrs.service.AddressService;
+import com.orjrs.miniapp.entity.Address;
+import com.orjrs.miniapp.mapper.AddressMapper;
+import com.orjrs.miniapp.service.AddressService;
 import com.orjrs.utils.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

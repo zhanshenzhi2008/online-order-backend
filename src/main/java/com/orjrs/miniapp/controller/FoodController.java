@@ -1,8 +1,9 @@
-package com.orjrs.controller;
+package com.orjrs.miniapp.controller;
 
 import com.orjrs.common.R;
-import com.orjrs.entity.Food;
-import com.orjrs.service.FoodService;
+import com.orjrs.miniapp.entity.Food;
+import com.orjrs.miniapp.service.FoodService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

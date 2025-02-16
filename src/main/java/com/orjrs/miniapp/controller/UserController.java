@@ -1,11 +1,11 @@
-package com.orjrs.controller;
+package com.orjrs.miniapp.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.orjrs.common.R;
 import com.orjrs.common.annotation.RequirePermission;
 import com.orjrs.common.enums.UserPermission;
-import com.orjrs.entity.User;
-import com.orjrs.service.UserService;
+import com.orjrs.miniapp.entity.User;
+import com.orjrs.miniapp.service.UserService;
 import com.orjrs.utils.UserContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

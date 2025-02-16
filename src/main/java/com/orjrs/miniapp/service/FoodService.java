@@ -1,7 +1,8 @@
-package com.orjrs.service;
+package com.orjrs.miniapp.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.orjrs.entity.Food;
+import com.orjrs.miniapp.entity.Food;
+
 import java.util.List;
 
 public interface FoodService extends IService<Food> {

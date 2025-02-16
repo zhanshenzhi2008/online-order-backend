@@ -1,8 +1,8 @@
-package com.orjrs.service.impl;
+package com.orjrs.miniapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.orjrs.entity.Order;
-import com.orjrs.service.OrderService;
+import com.orjrs.miniapp.entity.Order;
+import com.orjrs.miniapp.service.OrderService;
 import com.orjrs.utils.CacheUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

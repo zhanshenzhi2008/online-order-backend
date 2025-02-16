@@ -1,7 +1,9 @@
-package com.orjrs.controller;
+package com.orjrs.admin.controller;
 
-import com.orjrs.entity.Food;
-import com.orjrs.service.FoodService;
+import com.orjrs.miniapp.controller.FoodController;
+import com.orjrs.miniapp.entity.Food;
+import com.orjrs.miniapp.service.FoodService;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;

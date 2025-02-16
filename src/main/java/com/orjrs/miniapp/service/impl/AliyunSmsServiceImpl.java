@@ -1,4 +1,4 @@
-package com.orjrs.service.impl;
+package com.orjrs.miniapp.service.impl;
 
 import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
@@ -6,7 +6,8 @@ import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
 import com.aliyun.teaopenapi.models.Config;
 import com.orjrs.common.exception.BusinessException;
 import com.orjrs.config.SmsConfig;
-import com.orjrs.service.SmsService;
+import com.orjrs.miniapp.service.SmsService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;

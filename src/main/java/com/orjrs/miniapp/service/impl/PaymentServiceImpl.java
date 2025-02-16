@@ -1,4 +1,4 @@
-package com.orjrs.service.impl;
+package com.orjrs.miniapp.service.impl;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
@@ -7,9 +7,9 @@ import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.orjrs.common.exception.BusinessException;
 import com.orjrs.config.PaymentConfig;
-import com.orjrs.entity.Order;
-import com.orjrs.service.OrderService;
-import com.orjrs.service.PaymentService;
+import com.orjrs.miniapp.entity.Order;
+import com.orjrs.miniapp.service.OrderService;
+import com.orjrs.miniapp.service.PaymentService;
 import com.orjrs.utils.AlipayUtils;
 import com.orjrs.utils.JsonUtils;
 import com.orjrs.utils.WxPayUtils;
